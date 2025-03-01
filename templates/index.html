@@ -6,7 +6,7 @@
             fetch('/data')
                 .then(response => response.text())
                 .then(data => {
-                    alert(data);
+                    document.getElementById('data-display').innerText = data;
                 });
         }
     </script>
@@ -22,6 +22,7 @@
                 Edit <code>templates/index.html</code> and refresh to see your changes!
             </p>
             <button onclick="fetchData()">获取数据</button>
+            <div id="data-display"></div>
         </header>
     </div>
 </body>
