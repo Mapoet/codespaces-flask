@@ -23,7 +23,7 @@ def optimize_code():
     prompt = data.get("prompt")
     try:
         # 调用 deekseek-v1/-code API 进行代码优化
-        response = requests.post("https://api.deekseek.com/v1/code", 
+        response = requests.post("https://api.deepseek.com/v1/chat/completions", 
                                  headers={"Authorization": f"Bearer {api_key}"},
                                  json={"code": code, "prompt": prompt})
         response.raise_for_status()
