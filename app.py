@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, jsonify
-from openai import OpenAI
 import requests
 
 app = Flask(__name__)
@@ -24,17 +23,20 @@ def optimize_code():
     prompt = data.get("prompt")
     try:
         # 调用 DeepSeek API 进行代码优化
-        client = OpenAI(api_key=api_key, base_url="https://api.deepseek.com")
-        response = client.chat.completions.create(
-            model="deepseek-reasoner",
-            messages=[
-                {"role": "system", "content": "You are a helpful assistant"},
-                {"role": "user", "content": prompt},
-                {"role": "user", "content": code}
-            ],
-            stream=False
+        response = requests.post(
+            "https://api.deepseek.com/v1/chat/completions",
+            headers={"Authorization": f"Bearer {api_key}"},
+            json={
+                "model": "deepseek-reasoner",
+                "messages": [
+                    {"role": "system", "content": "You are a helpful assistant"},
+                    {"role": "user", "content": prompt},
+                    {"role": "user", "content": code}
+                ]
+            }
         )
-        optimized_code = response.choices[0].message.content
+        response.raise_for_status()
+        optimized_code = response.json().get("choices")[0].get("message").get("content")
         return jsonify({"optimized_code": optimized_code})
     except requests.exceptions.HTTPError as http_err:
         return jsonify({"error": f"HTTP error occurred: {http_err}"}), 500
