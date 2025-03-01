@@ -27,7 +27,7 @@ def optimize_code():
             "https://api.deepseek.com/v1/chat/completions",
             headers={"Authorization": f"Bearer {api_key}"},
             json={
-                "model": "deepseek-reasoner",
+                "model": "deepseek-chat",
                 "messages": [
                     {"role": "system", "content": "You are a helpful assistant"},
                     {"role": "user", "content": prompt},
