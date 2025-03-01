@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>代码优化</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <script>
+        function optimizeCode() {
+            const prompt = document.getElementById('prompt').value;
+            const code = document.getElementById('code-editor').value;
+            const apiKey = document.getElementById('api-key').value;
+            document.getElementById('copilot-output').innerText = prompt;
+            fetch('/optimize', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ code: code, api_key: apiKey, prompt: prompt })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('copilot-output').innerText += '\n' + (data.optimized_code || data.error);
+            })
+            .catch(error => {
+                document.getElementById('copilot-output').innerText += `\nError: ${error.message}`;
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="left-panel">
+            <input type="text" id="api-key" placeholder="输入 Deekseek API Key" />
+            <textarea id="prompt" placeholder="输入提示..."></textarea>
+            <textarea id="code-editor" placeholder="在此输入代码..."></textarea>
+            <button onclick="optimizeCode()">优化代码</button>
+        </div>
+        <div class="right-panel">
+            <div id="copilot-output">Copilot 服务输出将在这里显示...</div>
+        </div>
+    </div>
+</body>
+</html>

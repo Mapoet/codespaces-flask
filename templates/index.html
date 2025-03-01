@@ -1,15 +1,10 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
-    <script>
-        function fetchData() {
-            fetch('/data')
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById('data-display').innerText = data;
-                });
-        }
-    </script>
 </head>
 <body>
     <div class="App">
@@ -21,8 +16,7 @@
             <p class="small">
                 Edit <code>templates/index.html</code> and refresh to see your changes!
             </p>
-            <button onclick="fetchData()">获取数据</button>
-            <div id="data-display"></div>
+            <button onclick="window.location.href='/optimize-page'">优化代码</button>
         </header>
     </div>
 </body>

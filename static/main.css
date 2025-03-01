@@ -5,6 +5,9 @@ body {
         sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
 }
 
 code {
@@ -23,7 +26,7 @@ code {
 
 .App-header {
     background-color: #282c34;
-    min-height: 100vh;
+    min-height: 20vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -42,4 +45,49 @@ code {
 
 .small {
     font-size: 0.75rem;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+    flex: 1;
+}
+
+.left-panel, .right-panel {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.left-panel {
+    background-color: #f0f0f0;
+}
+
+.right-panel {
+    background-color: #282c34;
+    color: white;
+}
+
+textarea, input {
+    width: 100%;
+    font-family: monospace;
+    font-size: 1rem;
+    padding: 10px;
+    margin-bottom: 10px;
+    resize: none;
+}
+
+textarea#prompt {
+    height: 20%;
+}
+
+textarea#code-editor {
+    height: 60%;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
 }
