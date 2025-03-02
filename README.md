@@ -53,7 +53,7 @@
 
 ## 作者
 
-本项目由 `MapoetNiphy` 开发。
+本项目由 `Mapoet Niphy` 开发。
 
 ## 致谢
 
