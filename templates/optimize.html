@@ -8,15 +8,18 @@
     <script>
         function optimizeCode() {
             const prompt = document.getElementById('prompt').value;
-            const code = document.getElementById('code-editor').value;
             const apiKey = document.getElementById('api-key').value;
+            const files = document.getElementById('code-files').files;
+            const formData = new FormData();
+            formData.append('prompt', prompt);
+            formData.append('api_key', apiKey);
+            for (let i = 0; i < files.length; i++) {
+                formData.append('files', files[i]);
+            }
             document.getElementById('copilot-output').innerText = prompt;
             fetch('/optimize', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ code: code, api_key: apiKey, prompt: prompt })
+                body: formData
             })
             .then(response => response.json())
             .then(data => {
@@ -26,6 +29,18 @@
                 document.getElementById('copilot-output').innerText += `\nError: ${error.message}`;
             });
         }
+
+        function handleFolderSelect(event) {
+            const folderInput = event.target;
+            const files = folderInput.files;
+            const fileList = document.getElementById('file-list');
+            fileList.innerHTML = '';
+            for (let i = 0; i < files.length; i++) {
+                const li = document.createElement('li');
+                li.textContent = files[i].webkitRelativePath || files[i].name;
+                fileList.appendChild(li);
+            }
+        }
     </script>
 </head>
 <body>
@@ -33,7 +48,9 @@
         <div class="left-panel">
             <input type="text" id="api-key" placeholder="输入 Deekseek API Key" />
             <textarea id="prompt" placeholder="输入提示..."></textarea>
-            <textarea id="code-editor" placeholder="在此输入代码..."></textarea>
+            <input type="file" id="code-files" multiple />
+            <input type="file" id="folder-input" webkitdirectory directory multiple onchange="handleFolderSelect(event)" />
+            <ul id="file-list"></ul>
             <button onclick="optimizeCode()">优化代码</button>
         </div>
         <div class="right-panel">

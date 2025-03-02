@@ -17,10 +17,16 @@ def optimize_page():
 
 @app.route("/optimize", methods=["POST"])
 def optimize_code():
-    data = request.json
-    code = data.get("code")
-    api_key = data.get("api_key")
-    prompt = data.get("prompt")
+    prompt = request.form.get("prompt")
+    api_key = request.form.get("api_key")
+    files = request.files.getlist("files")
+    
+    code_contents = []
+    for file in files:
+        code_contents.append(file.read().decode("utf-8"))
+    
+    combined_code = "\n".join(code_contents)
+    
     try:
         # 调用 DeepSeek API 进行代码优化
         response = requests.post(
@@ -31,7 +37,7 @@ def optimize_code():
                 "messages": [
                     {"role": "system", "content": "You are a helpful assistant"},
                     {"role": "user", "content": prompt},
-                    {"role": "user", "content": code}
+                    {"role": "user", "content": combined_code}
                 ]
             }
         )

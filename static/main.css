@@ -91,3 +91,16 @@ button {
     font-size: 1rem;
     cursor: pointer;
 }
+
+ul#file-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+ul#file-list li {
+    background-color: #e0e0e0;
+    margin: 5px 0;
+    padding: 5px;
+    border-radius: 3px;
+}
