@@ -6,55 +6,109 @@
     <title>代码优化</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
     <script>
-        function optimizeCode() {
-            const prompt = document.getElementById('prompt').value;
-            const apiKey = document.getElementById('api-key').value;
-            const files = document.getElementById('code-files').files;
-            const formData = new FormData();
-            formData.append('prompt', prompt);
-            formData.append('api_key', apiKey);
-            for (let i = 0; i < files.length; i++) {
-                formData.append('files', files[i]);
+        let currentFile = '';
+        
+        function handleFolderSelect() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.webkitdirectory = true;
+            input.directory = true;  // 添加此行以支持更多浏览器
+            
+            input.onchange = (event) => {
+                const files = event.target.files;
+                const fileList = [];
+                for (let i = 0; i < files.length; i++) {
+                    fileList.push(files[i].webkitRelativePath || files[i].name);
+                }
+                
+                // 发送文件列表到后端
+                fetch('/update-file-tree', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ files: fileList })
+                }).then(() => {
+                    loadFileTree();
+                });
+            };
+            input.click();
+        }
+        
+        function loadFileTree() {
+            fetch('/file-tree')
+                .then(response => response.json())
+                .then(data => {
+                    const treeView = document.getElementById('file-tree');
+                    treeView.innerHTML = '';
+                    data.files.forEach(file => {
+                        const div = document.createElement('div');
+                        div.className = 'tree-item';
+                        div.textContent = file;
+                        div.onclick = () => handleFileSelect(file);
+                        treeView.appendChild(div);
+                    });
+                });
+        }
+        
+        function handleFileSelect(path) {
+            currentFile = path;
+            fetch(`/read-file?path=${encodeURIComponent(path)}`)
+                .then(response => response.text())
+                .then(content => {
+                    const editor = document.getElementById('editor');
+                    if (editor) {
+                        editor.value = content;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading file:', error);
+                });
+        }
+        
+        function saveAllFiles() {
+            // 触发当前文件的保存
+            if (currentFile) {
+                saveFile();
             }
-            document.getElementById('copilot-output').innerText = prompt;
-            fetch('/optimize', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('copilot-output').innerText += '\n' + (data.optimized_code || data.error);
-            })
-            .catch(error => {
-                document.getElementById('copilot-output').innerText += `\nError: ${error.message}`;
-            });
         }
 
-        function handleFolderSelect(event) {
-            const folderInput = event.target;
-            const files = folderInput.files;
-            const fileList = document.getElementById('file-list');
-            fileList.innerHTML = '';
-            for (let i = 0; i < files.length; i++) {
-                const li = document.createElement('li');
-                li.textContent = files[i].webkitRelativePath || files[i].name;
-                fileList.appendChild(li);
-            }
-        }
+        // ...existing code...
     </script>
 </head>
 <body>
     <div class="container">
-        <div class="left-panel">
-            <input type="text" id="api-key" placeholder="输入 Deekseek API Key" />
-            <textarea id="prompt" placeholder="输入提示..."></textarea>
-            <input type="file" id="code-files" multiple />
-            <input type="file" id="folder-input" webkitdirectory directory multiple onchange="handleFolderSelect(event)" />
-            <ul id="file-list"></ul>
-            <button onclick="optimizeCode()">优化代码</button>
+        <div class="file-explorer-container">
+            <div class="file-explorer-header">
+                <button class="menu-button" onclick="handleFolderSelect()">
+                    打开文件夹
+                </button>
+                <button class="menu-button" onclick="saveAllFiles()">
+                    保存全部
+                </button>
+            </div>
+            <div class="file-explorer" id="file-tree">
+                <!-- 文件树将由后端动态生成 -->
+            </div>
         </div>
-        <div class="right-panel">
-            <div id="copilot-output">Copilot 服务输出将在这里显示...</div>
+        
+        <div class="editor-panel">
+            <textarea id="editor" class="editor" onchange="saveFile()"></textarea>
+        </div>
+        
+        <div class="assistant-panel">
+            <input type="text" id="api-key" class="api-key-input" 
+                   placeholder="输入 DeepSeek API Key">
+            <div id="response-area" class="response-area">
+                AI 助手输出将在这里显示...
+            </div>
+            <div class="prompt-container">
+                <textarea id="prompt" class="prompt-input" 
+                       placeholder="输入提示..."></textarea>
+                <button class="submit-button" onclick="optimizeCode()">
+                    优化
+                </button>
+            </div>
         </div>
     </div>
 </body>

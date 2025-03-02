@@ -1,5 +1,6 @@
 body {
     margin: 0;
+    padding: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
         "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
         sans-serif;
@@ -8,6 +9,7 @@ body {
     display: flex;
     flex-direction: column;
     height: 100vh;
+    overflow: hidden;
 }
 
 code {
@@ -50,7 +52,7 @@ code {
 .container {
     display: flex;
     width: 100%;
-    flex: 1;
+    height: 100vh;
 }
 
 .left-panel, .right-panel {
@@ -103,4 +105,127 @@ ul#file-list li {
     margin: 5px 0;
     padding: 5px;
     border-radius: 3px;
+}
+
+.file-explorer-container {
+    width: 250px;
+    background-color: #252526;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+}
+
+.file-explorer-header {
+    padding: 10px;
+    border-bottom: 1px solid #3c3c3c;
+    display: flex;
+    gap: 5px;
+}
+
+.menu-button {
+    padding: 5px 10px;
+    background-color: #0e639c;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.menu-button:hover {
+    background-color: #1177bb;
+}
+
+.file-explorer {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.editor-panel {
+    flex: 1;
+    background-color: #1e1e1e;
+    color: #d4d4d4;
+}
+
+.assistant-panel {
+    width: 300px;
+    background-color: #2d2d2d;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.tree-view {
+    list-style: none;
+    padding-left: 0;
+}
+
+.tree-item {
+    cursor: pointer;
+    padding: 3px 5px;
+    font-size: 13px;
+}
+
+.tree-item:hover {
+    background-color: #37373d;
+}
+
+.editor {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background-color: #1e1e1e;
+    color: #d4d4d4;
+    font-family: 'Consolas', monospace;
+    padding: 10px;
+    resize: none;
+}
+
+.api-key-input {
+    padding: 10px;
+    margin: 10px;
+    background-color: #3c3c3c;
+    border: 1px solid #555;
+    color: #fff;
+}
+
+.response-area {
+    flex: 1;
+    margin: 10px;
+    padding: 10px;
+    background-color: #3c3c3c;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    font-family: 'Consolas', monospace;
+}
+
+.prompt-container {
+    display: flex;
+    padding: 10px;
+    gap: 10px;
+    height: 100px;
+}
+
+.prompt-input {
+    flex: 1;
+    padding: 10px;
+    background-color: #3c3c3c;
+    border: 1px solid #555;
+    color: #fff;
+    resize: none;
+    font-family: 'Consolas', monospace;
+}
+
+.submit-button {
+    padding: 10px 20px;
+    background-color: #0e639c;
+    color: white;
+    border: none;
+    cursor: pointer;
+    align-self: flex-end;
+}
+
+.submit-button:hover {
+    background-color: #1177bb;
 }
